@@ -22,5 +22,8 @@ func (s *Schema) GetExsample(OrdinalPosition int64) string {
 	if len(*s.ValueSlice) <= 0 {
 		return "　"
 	}
+	if (*s.ColumnSlice)[OrdinalPosition-1].ColumnType == "datetime" {
+		return "2016-01-01 00:00:00"
+	}
 	return (*s.ValueSlice)[OrdinalPosition-1].(string)
 }
