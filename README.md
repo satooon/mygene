@@ -5,13 +5,13 @@ MySQL document generator
 ## Installation
 
 ```
-go get -u github.com/satooon/mygene
+go get -u github.com/satooon/mygene/cmd/mygene
 ```
 
 ## Use
 
 ```
-mygene "user:pass@tcp(host:port)/databasename" -o ./document/
+mygene -d "user:pass@tcp(host:port)/databasename" -o ./document/
 ```
 
 
