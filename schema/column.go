@@ -29,6 +29,8 @@ type Column struct {
 	Extra                  string         `db:"EXTRA"`
 	Privileges             string         `db:"PRIVILEGES"`
 	ColumnComment          string         `db:"COLUMN_COMMENT"`
+	IsGenerated            string         `db:"IS_GENERATED"`
+	GenerationExpression   sql.NullString `db:"GENERATION_EXPRESSION"`
 }
 
 func (c *Column) GetColumnComment() template.HTML {
