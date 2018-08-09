@@ -54,6 +54,7 @@ func main() {
 
 func action(c *cli.Context) {
 	const (
+		TableQuery  = "SELECT * FROM information_schema.TABLES WHERE information_schema.TABLES.TABLE_SCHEMA = ?"
 		ColumnQuery = "SELECT * FROM information_schema.COLUMNS WHERE information_schema.COLUMNS.TABLE_SCHEMA = ?"
 		ValueQuery  = "SELECT * FROM %s LIMIT 1"
 		IndexQuery  = "SELECT * FROM information_schema.STATISTICS WHERE information_schema.STATISTICS.TABLE_SCHEMA = ?"
@@ -85,6 +86,13 @@ func action(c *cli.Context) {
 		dbMap.TraceOn("[gorp]", log.New(os.Stdout, "myapp:", log.Lmicroseconds))
 	}
 	defer dbMap.Db.Close()
+
+	var tableSlice schema.TableSlice
+	if _, err := dbMap.Select(&tableSlice, TableQuery, database); err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+	tableMapByTableName := tableSlice.GroupByString(func(m *schema.Table) string { return m.TableName })
 
 	var columnSlice schema.ColumnSlice
 	if _, err := dbMap.Select(&columnSlice, ColumnQuery, database); err != nil {
@@ -138,7 +146,10 @@ func action(c *cli.Context) {
 		if !ok {
 			idxSlice = schema.IndexSlice{}
 		}
-		*schemaSlice = append(*schemaSlice, schema.NewSchema(tbl, &colSlice, valSlice, &idxSlice))
+
+		tblSlice := tableMapByTableName[tbl]
+
+		*schemaSlice = append(*schemaSlice, schema.NewSchema(tbl, tblSlice[0], &colSlice, valSlice, &idxSlice))
 	}
 
 	if verbose {

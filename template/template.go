@@ -78,6 +78,9 @@ func outputCsv(temp *Template) (err error) {
 }
 
 var mdTpl string = `# {{.Name}}
+
+**{{.Table.TableComment}}**
+
 |No|名前|型|Null|Key|Extra|Exsample|備考|
 |:--|:--|:--:|:--:|:--:|:--:|:--|:--|
 {{range $column := .ColumnSlice}}|{{$column.OrdinalPosition}}|{{$column.ColumnName}}|{{$column.ColumnType}}|{{$column.IsNullable}}|{{$column.GetColumnKey}}|{{$column.GetExtra}}|{{$column.OrdinalPosition|GetExsample}}|{{$column.GetColumnComment}}|
@@ -86,6 +89,7 @@ var mdTpl string = `# {{.Name}}
 ` + mdTplIdx
 
 var mdTplIdx string = `## Index
+
 |非ユニーク|キーの名前|インデックス内の順番|カラム名|照合順序|カーディナリティ|部分長|圧縮|コメント|
 |:--:|:--|:--:|:--|:--:|:--|:--:|:--:|:--|
 {{range $idx := .IndexSlice}}|{{$idx.NonUnique}}|{{$idx.IndexName}}|{{$idx.SeqInIndex}}|{{$idx.ColumnName}}|{{$idx.GetCollation}}|{{$idx.GetCardinality}}|{{$idx.GetSubPart}}|{{$idx.GetPacked}}|{{$idx.GetComment}}|

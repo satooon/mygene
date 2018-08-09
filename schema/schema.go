@@ -4,14 +4,16 @@ package schema
 // +gen * slice:"All,Any,Count,DistinctBy,First,GroupBy[string],Shuffle,SortBy,Where"
 type Schema struct {
 	Name        string
+	Table       *Table
 	ColumnSlice *ColumnSlice
 	ValueSlice  *ValueSlice
 	IndexSlice  *IndexSlice
 }
 
-func NewSchema(Name string, ColumnSlice *ColumnSlice, ValueSlice *ValueSlice, IndexSlice *IndexSlice) *Schema {
+func NewSchema(Name string, Table *Table, ColumnSlice *ColumnSlice, ValueSlice *ValueSlice, IndexSlice *IndexSlice) *Schema {
 	return &Schema{
 		Name:        Name,
+		Table:       Table,
 		ColumnSlice: ColumnSlice,
 		ValueSlice:  ValueSlice,
 		IndexSlice:  IndexSlice,
